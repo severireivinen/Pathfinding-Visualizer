@@ -1,11 +1,13 @@
 import React from 'react'
-import Board from './components/Board'
+import Grid from './components/Grid'
+import Header from './components/Header'
 
 const App = () => {
 
   return (
     <div className='container'>
-      <Board />
+      <Header />
+      <Grid />
     </div>
   )
 }

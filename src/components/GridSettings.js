@@ -1,14 +1,9 @@
 import React, { useState } from 'react'
-import { Button, Form } from 'react-bootstrap'
+import { Button, ButtonGroup, Form } from 'react-bootstrap'
 
-const GridSettings = ({ updateBoard }) => {
+const GridSettings = ({ updateBoard, clearWalls, visualize, clearGrid }) => {
     const [width, setWidth] = useState('')
     const [heigth, setHeigth] = useState('')
-
-    const style = {
-        'textAlign': 'center',
-        'margin': '5px',
-    }
 
     const submit = (event) => {
         event.preventDefault()
@@ -19,14 +14,14 @@ const GridSettings = ({ updateBoard }) => {
     }
 
     return (
-        <div style={style}>
+        <div>
             <h1>Pathfinder</h1>
             <div>
-                <button>Start</button>
-                <button>Finish</button>
-                <button>Wall</button>
-                <div>Currently selected:</div>
-
+                <ButtonGroup aria-label="Settings for grid">
+                    <Button onClick={clearWalls} variant='secondary'>Clear Walls</Button>
+                    <Button onClick={clearGrid} variant='secondary'>Clear Grid</Button>
+                    <Button onClick={visualize} variant='secondary'>Visualize!</Button>
+                </ButtonGroup>
             </div>
             <div>
                 <h2>Board size</h2>

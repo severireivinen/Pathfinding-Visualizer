@@ -1,18 +1,15 @@
 import React from 'react'
+import '../styles/Node.css'
 
 const Node = ({ row, col, handleMouseDown, handleMouseEnter, handleMouseUp, isWall, isStart, isFinish }) => {
 
-    const style = {
-        width: '25px',
-        height: '25px',
-        outline: '1px solid black',
-        background: isWall ? 'gray' : isStart ? 'green' : isFinish ? 'red' : 'white'
-    }
+
+    const extraClassName = isFinish ? 'node-finish' : isStart ? 'node-start' : isWall ? 'node-wall' : ''
 
     return (
         <div
-            style={style}
             id={`node-${row}-${col}`}
+            className={`node ${extraClassName}`}
             onMouseEnter={handleMouseEnter}
             onMouseDown={handleMouseDown}
             onMouseUp={handleMouseUp}
