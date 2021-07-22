@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Button, ButtonGroup, Form } from 'react-bootstrap'
 
-const GridSettings = ({ updateBoard, clearWalls, visualize, clearGrid }) => {
+const GridSettings = ({ updateBoard, clearWalls, clearGrid, visualizeAstar, visualizeDijkstra }) => {
     const [width, setWidth] = useState('')
     const [heigth, setHeigth] = useState('')
 
@@ -20,7 +20,8 @@ const GridSettings = ({ updateBoard, clearWalls, visualize, clearGrid }) => {
                 <ButtonGroup aria-label="Settings for grid">
                     <Button onClick={clearWalls} variant='secondary'>Clear Walls</Button>
                     <Button onClick={clearGrid} variant='secondary'>Clear Grid</Button>
-                    <Button onClick={visualize} variant='secondary'>Visualize!</Button>
+                    <Button onClick={visualizeAstar} variant='secondary'>Astar!</Button>
+                    <Button onClick={visualizeDijkstra} variant='secondary'>Dijkstra!</Button>
                 </ButtonGroup>
             </div>
             <div>

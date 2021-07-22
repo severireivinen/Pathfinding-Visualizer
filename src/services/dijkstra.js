@@ -1,6 +1,5 @@
 export const dijkstra = (grid, startNode, finishNode) => {
     const visitedNotesOrdered = []
-
     startNode.distance = 0
     const unvisitedNodes = getAllNodes(grid)
 
@@ -51,4 +50,4 @@ const updateUnvisitedNeighbors = (node, grid) => {
     }
 }
 
-export default { dijkstra }
+export default { dijkstra }     //eslint-disable-line

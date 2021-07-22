@@ -3,7 +3,9 @@ import { Container, Row } from 'react-bootstrap'
 import GridSettings from './GridSettings'
 import Node from './Node'
 import { dijkstra } from '../services/dijkstra'
+import { astar } from '../services/astar'
 import Togglable from './Togglable'
+import '../styles/Grid.css'
 
 const Grid = () => {
     const [grid, setGrid] = useState([])
@@ -43,6 +45,7 @@ const Grid = () => {
             isStart: row === startRow && col === startCol,
             isFinish: row === finishRow && col === finishCol,
             distance: Infinity,
+            totalDistance: Infinity,
             distanceToFinishNode: Math.abs(finishRow - row) + Math.abs(finishCol - col),
             isVisited: false,
             previousNode: null,
@@ -162,16 +165,19 @@ const Grid = () => {
                         document.getElementById(`node-${node.row}-${node.col}`).className = 'node'
                         node.isVisited = false
                         node.distance = Infinity
+                        node.totalDistance = Infinity
                         node.distanceToFinishNode = Math.abs(finishRow - node.row) + Math.abs(finishCol - node.col)
                     }
                     if (nodeClassName === 'node node-finish') {
                         node.isVisited = false
                         node.distance = Infinity
+                        node.totalDistance = Infinity
                         node.distanceToFinishNode = 0
                     }
                     if (nodeClassName === 'node node-start') {
                         node.isVisited = false
                         node.distance = Infinity
+                        node.totalDistance = Infinity
                         node.distanceToFinishNode = Math.abs(finishRow - node.row) + Math.abs(finishCol - node.col)
                         node.isStart = true
                         node.isWall = false
@@ -208,9 +214,14 @@ const Grid = () => {
             switch (algorithm) {
                 case 'Dijkstra':
                     visitedNodesOrdered = dijkstra(grid, startNode, finishNode)
-                    break;
+                    console.log('Visualizing Dijkstra')
+                    break
+                case 'Astar':
+                    visitedNodesOrdered = astar(grid, startNode, finishNode)
+                    console.log('Visualizing Astar')
+                    break
                 default:
-                    break;
+                    break
             }
             const nodesInShortestPathOrder = getNodesInShortestPathOrder(finishNode)
             nodesInShortestPathOrder.push('finish')
@@ -268,39 +279,42 @@ const Grid = () => {
     return (
         <div>
             <Container>
-                {grid.map((row, rowIndex) => {
-                    return (
-                        <Row className='justify-content-md-center' key={rowIndex}>
-                            {row.map((node, nodeIndex) => {
-                                const { row, col, isWall, isStart, isFinish } = node
-                                return (
-                                    <Node
-                                        key={nodeIndex}
-                                        row={row}
-                                        col={col}
-                                        isWall={isWall}
-                                        isStart={isStart}
-                                        isFinish={isFinish}
-                                        mouseIsPressed={mouseIsPressed}
-                                        handleMouseDown={() => handleMouseDown(row, col)}
-                                        handleMouseEnter={() => handleMouseEnter(row, col)}
-                                        handleMouseUp={() => handleMouseUp(row, col)}
-                                    />
-                                )
-                            })}
-                        </Row>
-                    )
-                })}
-            </Container>
-            <Container>
-                <Togglable buttonLabel='Settings' className='justify-content-md-center'>
-                    <GridSettings
-                        updateBoard={updateBoard}
-                        clearWalls={clearWalls}
-                        visualize={() => visualize('Dijkstra')}
-                        clearGrid={() => clearGrid()}
-                    />
-                </Togglable>
+                <div>
+                    <Togglable buttonLabel='Settings' className='justify-content-md-center'>
+                        <GridSettings
+                            updateBoard={updateBoard}
+                            clearWalls={clearWalls}
+                            visualizeDijkstra={() => visualize('Dijkstra')}
+                            visualizeAstar={() => visualize('Astar')}
+                            clearGrid={() => clearGrid()}
+                        />
+                    </Togglable>
+                </div>
+                <div>
+                    {grid.map((row, rowIndex) => {
+                        return (
+                            <Row className='justify-content-md-center' key={rowIndex}>
+                                {row.map((node, nodeIndex) => {
+                                    const { row, col, isWall, isStart, isFinish } = node
+                                    return (
+                                        <Node
+                                            key={nodeIndex}
+                                            row={row}
+                                            col={col}
+                                            isWall={isWall}
+                                            isStart={isStart}
+                                            isFinish={isFinish}
+                                            mouseIsPressed={mouseIsPressed}
+                                            handleMouseDown={() => handleMouseDown(row, col)}
+                                            handleMouseEnter={() => handleMouseEnter(row, col)}
+                                            handleMouseUp={() => handleMouseUp(row, col)}
+                                        />
+                                    )
+                                })}
+                            </Row>
+                        )
+                    })}
+                </div>
             </Container>
         </div>
     )
