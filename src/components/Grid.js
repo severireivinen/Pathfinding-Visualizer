@@ -4,13 +4,18 @@ import Node from './Node'
 
 const Grid = ({ boardWidth, boardHeigth }) => {
     const [grid, setGrid] = useState([])
-    const [startRow, setStartRow] = useState(0)         // Static for now
-    const [startCol, setStartCol] = useState(0)         // Static for now
-    const [finishRow, setFinishRow] = useState(5)       // Static for now
-    const [finishCol, setfinishCol] = useState(5)       // Static for now
+    const [startRow, setStartRow] = useState(0)
+    const [startCol, setStartCol] = useState(0)
+    const [finishRow, setFinishRow] = useState(5)
+    const [finishCol, setfinishCol] = useState(5)
+    const [currentRow, setCurrentRow] = useState(0)
+    const [currentCol, setCurrentCol] = useState(0)
+
     const [mouseIsPressed, setMouseIsPressed] = useState(false)
-    const [startPressed, setStartPressed] = useState(false)
-    const [finishPressed, setFinishPressed] = useState(false)
+    const [isWallNode, setIsWallNode] = useState(false)
+    const [isStartNode, setIsStartNode] = useState(false)
+    const [isFinishNode, setIsFinishNode] = useState(false)
+
 
     useEffect(() => {
         const initialGrid = []
@@ -34,16 +39,6 @@ const Grid = ({ boardWidth, boardHeigth }) => {
         }
     }
 
-    const updateStart = (row, col) => {
-        setStartRow(row)
-        setStartCol(col)
-    }
-
-    const updateFinish = (row, col) => {
-        setFinishRow(row)
-        setfinishCol(col)
-    }
-
     const updateWalls = (grid, row, col) => {
         const newGrid = grid.slice()
         const node = newGrid[row][col]
@@ -53,23 +48,70 @@ const Grid = ({ boardWidth, boardHeigth }) => {
     }
 
     const handleMouseDown = (row, col) => {
-        //const node = grid[row][col]
-        //const newGrid = node.isStart ? updateStart(grid, row, col) : node.isFinish ? updateFinish(grid, row, col) : updateWalls(grid, row, col)
-        const newGrid = updateWalls(grid, row, col);
-        setGrid(newGrid)
-        setMouseIsPressed(true)
+        const node = grid[row][col]
+        if (node.isStart) {
+            setMouseIsPressed(true)
+            setIsStartNode(true)
+            setCurrentRow(row)
+            setCurrentCol(col)
+        } else if (node.isFinish) {
+            setMouseIsPressed(true)
+            setIsFinishNode(true)
+            setCurrentRow(row)
+            setCurrentCol(col)
+        } else {
+            const newGrid = updateWalls(grid, row, col);
+            setGrid(newGrid)
+            setMouseIsPressed(true)
+            setIsWallNode(true)
+            setCurrentRow(row)
+            setCurrentCol(col)
+        }
     }
 
     const handleMouseEnter = (row, col) => {
-        if (!mouseIsPressed) {
-            return
+        if (mouseIsPressed) {
+            const node = grid[row][col]
+            if (isStartNode) {
+                if (!node.isWall) {
+                    const previousStartNode = grid[currentRow][currentCol]
+                    previousStartNode.isStart = false
+                    setCurrentRow(row)
+                    setCurrentCol(col)
+                    const newStartNode = grid[row][col]
+                    newStartNode.isStart = true
+                }
+                setStartRow(row)
+                setStartCol(col)
+            } else if (isFinishNode) {
+                if (!node.isWall) {
+                    const previousFinishNode = grid[currentRow][currentCol]
+                    previousFinishNode.isFinish = false
+                    setCurrentRow(row)
+                    setCurrentCol(col)
+                    const newFinishNode = grid[row][col]
+                    newFinishNode.isFinish = true
+                }
+                setFinishRow(row)
+                setfinishCol(col)
+            } else if (isWallNode) {
+                const newGrid = updateWalls(grid, row, col);
+                setGrid(newGrid)
+            }
         }
-        const newGrid = updateWalls(grid, row, col);
-        setGrid(newGrid)
     }
 
-    const handleMouseUp = () => {
+    const handleMouseUp = (row, col) => {
         setMouseIsPressed(false)
+        if (isStartNode) {
+            setIsStartNode(!isStartNode)
+            setStartRow(row)
+            setStartCol(col)
+        } else if (isFinishNode) {
+            setIsFinishNode(!isFinishNode)
+            setFinishRow(row)
+            setfinishCol(col)
+        }
     }
 
 
@@ -90,9 +132,9 @@ const Grid = ({ boardWidth, boardHeigth }) => {
                                         isStart={isStart}
                                         isFinish={isFinish}
                                         mouseIsPressed={mouseIsPressed}
-                                        handleMouseDown={(row, col) => handleMouseDown(row, col)}
-                                        handleMouseEnter={(row, col) => handleMouseEnter(row, col)}
-                                        handleMouseUp={() => handleMouseUp()}
+                                        handleMouseDown={() => handleMouseDown(row, col)}
+                                        handleMouseEnter={() => handleMouseEnter(row, col)}
+                                        handleMouseUp={() => handleMouseUp(row, col)}
                                     />
                                 )
                             })}
