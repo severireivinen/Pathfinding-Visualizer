@@ -1,13 +1,14 @@
 import React from 'react'
+import Footer from './components/Footer'
 import Grid from './components/Grid'
-import Header from './components/Header'
+import './styles/App.css'
 
 const App = () => {
 
   return (
     <div className='container'>
-      <Header />
       <Grid />
+      <Footer />
     </div>
   )
 }

@@ -4,11 +4,11 @@ import Node from './Node'
 import { dijkstra } from '../services/dijkstra'
 import { astar } from '../services/astar'
 import '../styles/Grid.css'
-import { Table } from 'react-bootstrap'
+import { Container, Table } from 'react-bootstrap'
 
 
-const ROW_COUNT = 18
-const COL_COUNT = 26
+const ROW_COUNT = 25
+const COL_COUNT = 30
 
 const Grid = () => {
     const [grid, setGrid] = useState([])
@@ -37,6 +37,8 @@ const Grid = () => {
         }
         setGrid(initialGrid)
     }, []) //eslint-disable-line
+
+    console.log(grid)
 
     const createNode = (row, col) => {
         return {
@@ -271,16 +273,15 @@ const Grid = () => {
 
 
     return (
-        <div>
-            <div>
-                <GridSettings
-                    clearWalls={clearWalls}
-                    visualizeDijkstra={() => visualize('Dijkstra')}
-                    visualizeAstar={() => visualize('Astar')}
-                    clearGrid={() => clearGrid()}
-                />
-            </div>
-            <Table className='grid-container'>
+        <Container className='grid'>
+
+            <GridSettings
+                clearWalls={clearWalls}
+                visualizeDijkstra={() => visualize('Dijkstra')}
+                visualizeAstar={() => visualize('Astar')}
+                clearGrid={() => clearGrid()}
+            />
+            <Table responsive className='grid-container'>
                 <tbody className='grid'>
                     {grid.map((row, rowIndex) => {
                         return (
@@ -307,7 +308,7 @@ const Grid = () => {
                     })}
                 </tbody>
             </Table>
-        </div>
+        </Container>
     )
 }
 
