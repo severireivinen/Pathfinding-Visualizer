@@ -1,22 +1,23 @@
 import React, { useState, useEffect } from 'react'
-import { Container, Row } from 'react-bootstrap'
 import GridSettings from './GridSettings'
 import Node from './Node'
 import { dijkstra } from '../services/dijkstra'
 import { astar } from '../services/astar'
-import Togglable from './Togglable'
 import '../styles/Grid.css'
+import { Table } from 'react-bootstrap'
+
+
+const ROW_COUNT = 18
+const COL_COUNT = 26
 
 const Grid = () => {
     const [grid, setGrid] = useState([])
     const [startRow, setStartRow] = useState(0)
     const [startCol, setStartCol] = useState(0)
     const [finishRow, setFinishRow] = useState(5)
-    const [finishCol, setfinishCol] = useState(5)
+    const [finishCol, setfinishCol] = useState(7)
     const [currentRow, setCurrentRow] = useState(0)
     const [currentCol, setCurrentCol] = useState(0)
-    const [boardWidth, setBoardWidth] = useState(15)
-    const [boardHeigth, setBoardHeigth] = useState(15)
 
     const [mouseIsPressed, setMouseIsPressed] = useState(false)
     const [isWallNode, setIsWallNode] = useState(false)
@@ -27,15 +28,15 @@ const Grid = () => {
 
     useEffect(() => {
         const initialGrid = []
-        for (let row = 0; row < boardWidth; row++) {
+        for (let row = 0; row < ROW_COUNT; row++) {
             const currenRow = []
-            for (let col = 0; col < boardHeigth; col++) {
+            for (let col = 0; col < COL_COUNT; col++) {
                 currenRow.push(createNode(row, col))
             }
             initialGrid.push(currenRow)
         }
         setGrid(initialGrid)
-    }, [boardHeigth, boardWidth])  // eslint-disable-line
+    }, []) //eslint-disable-line
 
     const createNode = (row, col) => {
         return {
@@ -46,7 +47,6 @@ const Grid = () => {
             isFinish: row === finishRow && col === finishCol,
             distance: Infinity,
             totalDistance: Infinity,
-            distanceToFinishNode: Math.abs(finishRow - row) + Math.abs(finishCol - col),
             isVisited: false,
             previousNode: null,
             isNode: true
@@ -135,11 +135,6 @@ const Grid = () => {
         return newGrid
     }
 
-    const updateBoard = (width, heigth) => {
-        setBoardWidth(width)
-        setBoardHeigth(heigth)
-    }
-
     const clearWalls = () => {
         const newGrid = grid.slice()
         for (const row of newGrid) {
@@ -166,7 +161,6 @@ const Grid = () => {
                         node.isVisited = false
                         node.distance = Infinity
                         node.totalDistance = Infinity
-                        node.distanceToFinishNode = Math.abs(finishRow - node.row) + Math.abs(finishCol - node.col)
                     }
                     if (nodeClassName === 'node node-finish') {
                         node.isVisited = false
@@ -178,7 +172,6 @@ const Grid = () => {
                         node.isVisited = false
                         node.distance = Infinity
                         node.totalDistance = Infinity
-                        node.distanceToFinishNode = Math.abs(finishRow - node.row) + Math.abs(finishCol - node.col)
                         node.isStart = true
                         node.isWall = false
                         node.previousNode = null
@@ -186,6 +179,7 @@ const Grid = () => {
                     }
                 }
             }
+            setGrid(newGrid)
         }
     }
 
@@ -278,22 +272,19 @@ const Grid = () => {
 
     return (
         <div>
-            <Container>
-                <div>
-                    <Togglable buttonLabel='Settings' className='justify-content-md-center'>
-                        <GridSettings
-                            updateBoard={updateBoard}
-                            clearWalls={clearWalls}
-                            visualizeDijkstra={() => visualize('Dijkstra')}
-                            visualizeAstar={() => visualize('Astar')}
-                            clearGrid={() => clearGrid()}
-                        />
-                    </Togglable>
-                </div>
-                <div>
+            <div>
+                <GridSettings
+                    clearWalls={clearWalls}
+                    visualizeDijkstra={() => visualize('Dijkstra')}
+                    visualizeAstar={() => visualize('Astar')}
+                    clearGrid={() => clearGrid()}
+                />
+            </div>
+            <Table className='grid-container'>
+                <tbody className='grid'>
                     {grid.map((row, rowIndex) => {
                         return (
-                            <Row className='justify-content-md-center' key={rowIndex}>
+                            <tr key={rowIndex}>
                                 {row.map((node, nodeIndex) => {
                                     const { row, col, isWall, isStart, isFinish } = node
                                     return (
@@ -311,11 +302,11 @@ const Grid = () => {
                                         />
                                     )
                                 })}
-                            </Row>
+                            </tr>
                         )
                     })}
-                </div>
-            </Container>
+                </tbody>
+            </Table>
         </div>
     )
 }

@@ -7,14 +7,14 @@ const Node = ({ row, col, handleMouseDown, handleMouseEnter, handleMouseUp, isWa
     const extraClassName = isFinish ? 'node-finish' : isStart ? 'node-start' : isWall ? 'node-wall' : ''
 
     return (
-        <div
+        <td
             id={`node-${row}-${col}`}
             className={`node ${extraClassName}`}
             onMouseEnter={handleMouseEnter}
             onMouseDown={handleMouseDown}
             onMouseUp={handleMouseUp}
         >
-        </div>
+        </td>
     )
 }
 
