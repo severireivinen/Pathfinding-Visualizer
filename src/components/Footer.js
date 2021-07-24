@@ -9,9 +9,11 @@ const Footer = () => {
     return (
         <Card>
             <Card.Body>
-                <Card.Title>Thanks for stopping by!</Card.Title>
+                <Card.Title>How to use?</Card.Title>
                 <Card.Text>
-                    Make sure to check out my GitGub page.
+                    Set start and end location by moving green and red nodes.
+                    Optionally drag walls by clicking and holding mouse on white nodes.
+                    Pick an algorithm from the dropdown menu and see the magic!
                 </Card.Text>
                 <Button onClick={goTohub} variant='primary'>GitHub</Button>
             </Card.Body>

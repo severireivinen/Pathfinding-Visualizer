@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react'
+import { Container, Table } from 'react-bootstrap'
+import '../styles/Grid.css'
 import GridSettings from './GridSettings'
 import Node from './Node'
-import { dijkstra } from '../services/dijkstra'
-import { astar } from '../services/astar'
-import '../styles/Grid.css'
-import { Container, Table } from 'react-bootstrap'
+import { dijkstra } from '../services/algorithms/dijkstra'
+import { astar } from '../services/algorithms/astar'
+import { randomMaze } from '../services/mazes/random'
 
 
 const ROW_COUNT = 25
@@ -37,8 +38,6 @@ const Grid = () => {
         }
         setGrid(initialGrid)
     }, []) //eslint-disable-line
-
-    console.log(grid)
 
     const createNode = (row, col) => {
         return {
@@ -221,11 +220,33 @@ const Grid = () => {
             }
             const nodesInShortestPathOrder = getNodesInShortestPathOrder(finishNode)
             nodesInShortestPathOrder.push('finish')
-            animate(visitedNodesOrdered, nodesInShortestPathOrder)
+            animateAlgorithm(visitedNodesOrdered, nodesInShortestPathOrder)
         }
     }
 
-    const animate = (visitedNodesOrdered, nodesInShortestPathOrder) => {
+    const visualizeMaze = (maze) => {
+        if (!isRunning) {
+            clearGrid()
+            const startNode = grid[startRow][startCol]
+            const finishNode = grid[finishRow][finishCol]
+            let walls
+
+            switch (maze) {
+                case 'Random':
+                    walls = randomMaze(grid, startNode, finishNode)
+                    break
+                default:
+                    break
+            }
+            animateMaze(walls)
+        }
+    }
+
+    const animateMaze = (walls) => {
+
+    }
+
+    const animateAlgorithm = (visitedNodesOrdered, nodesInShortestPathOrder) => {
         for (let i = 0; i <= visitedNodesOrdered.length; i++) {
             if (i === visitedNodesOrdered.length) {
                 setTimeout(() => {
@@ -279,6 +300,7 @@ const Grid = () => {
                 clearWalls={clearWalls}
                 visualizeDijkstra={() => visualize('Dijkstra')}
                 visualizeAstar={() => visualize('Astar')}
+                visualizeRandomMaze={() => visualizeMaze('Random')}
                 clearGrid={() => clearGrid()}
             />
             <Table responsive className='grid-container'>

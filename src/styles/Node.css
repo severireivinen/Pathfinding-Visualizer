@@ -1,7 +1,7 @@
 .node {
   width: 25px;
   height: 25px;
-  outline: 1px solid black;
+  outline: 1px solid rgba(0, 0, 0, 0.445);
   background-color: white;
   display: inline-block;
 }
@@ -51,6 +51,15 @@
   background-color: rgb(83, 77, 77);
 }
 
+.node-wall-animated {
+  display: inline-block;
+  animation-name: wallAnimation;
+  animation-duration: 0.5s;
+  animation-timing-function: ease-out;
+  animation-direction: alternate;
+  animation-fill-mode: forwards;
+}
+
 .node-shortest-path {
   animation-name: shortestPath;
   animation-duration: 1.5s;
@@ -60,6 +69,28 @@
   animation-iteration-count: 1;
   animation-fill-mode: forwards;
   animation-play-state: running;
+}
+
+@keyframes wallAnimation {
+  0% {
+    transform: scale(0.4);
+    background-color: rgb(2, 36, 51);
+  }
+
+  50% {
+    transform: scale(0.6);
+    background-color: rgb(2, 36, 51);
+  }
+
+  75% {
+    transform: scale(0.8);
+    background-color: rgb(2, 36, 51);
+  }
+
+  100% {
+    transform: scale(1);
+    background-color: rgb(83, 77, 77);
+  }
 }
 
 @keyframes shortestPath {
