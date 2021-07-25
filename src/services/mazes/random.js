@@ -1,16 +1,24 @@
 export const randomMaze = (grid, startNode, finishNode) => {
     const walls = []
-
-    for (let row = 0; row < grid.length; row++) {
-        for (let col = 0; col < grid[0].length; col++) {
-            if ((row === startNode.row && col === startNode.col) || (row === finishNode.row && col === finishNode.col)) continue
-            if (Math.random() < 0.33) {
-                walls.push([row, col])
-            }
+    const allNodes = getAllNodes(grid)
+    for (let node of allNodes) {
+        if (node === startNode || node === finishNode) continue
+        if (Math.random() < 0.33) {
+            walls.push(node)
         }
     }
     walls.sort(() => Math.random() - 0.5)
     return walls
+}
+
+const getAllNodes = (grid) => {
+    const nodes = []
+    for (const row of grid) {
+        for (const node of row) {
+            nodes.push(node)
+        }
+    }
+    return nodes
 }
 
 export default { randomMaze } // eslint-disable-line

@@ -6,10 +6,12 @@ import Node from './Node'
 import { dijkstra } from '../services/algorithms/dijkstra'
 import { astar } from '../services/algorithms/astar'
 import { randomMaze } from '../services/mazes/random'
+import { horizontalMaze } from '../services/mazes/horizontal'
+import { verticalMaze } from '../services/mazes/vertical'
 
 
 const ROW_COUNT = 25
-const COL_COUNT = 30
+const COL_COUNT = 43
 
 const Grid = () => {
     const [grid, setGrid] = useState([])
@@ -50,7 +52,6 @@ const Grid = () => {
             totalDistance: Infinity,
             isVisited: false,
             previousNode: null,
-            isNode: true
         }
     }
 
@@ -136,12 +137,22 @@ const Grid = () => {
         return newGrid
     }
 
+    const updateMaze = (grid, walls) => {
+        const newGrid = grid.slice()
+        for (const wall of walls) {
+            const node = grid[wall.row][wall.col]
+            const newNode = { ...node, isWall: true }
+            newGrid[wall.row][wall.col] = newNode
+        }
+        return newGrid
+    }
+
     const clearWalls = () => {
         const newGrid = grid.slice()
         for (const row of newGrid) {
             for (const node of row) {
                 let nodeClassName = document.getElementById(`node-${node.row}-${node.col}`).className
-                if (nodeClassName === 'node node-wall') {
+                if (nodeClassName === 'node node-wall' || nodeClassName === 'node node-wall-animated') {
                     document.getElementById(`node-${node.row}-${node.col}`).className = 'node'
                     node.isWall = false
                 }
@@ -156,7 +167,7 @@ const Grid = () => {
             for (const row of newGrid) {
                 for (const node of row) {
                     let nodeClassName = document.getElementById(`node-${node.row}-${node.col}`).className
-                    if (nodeClassName !== 'node node-start' && nodeClassName !== 'node node-finish' && nodeClassName !== 'node node-wall') {
+                    if (nodeClassName !== 'node node-start' && nodeClassName !== 'node node-finish' && nodeClassName !== 'node node-wall' && nodeClassName !== 'node node-wall-animated') {
 
                         document.getElementById(`node-${node.row}-${node.col}`).className = 'node'
                         node.isVisited = false
@@ -174,9 +185,7 @@ const Grid = () => {
                         node.distance = Infinity
                         node.totalDistance = Infinity
                         node.isStart = true
-                        node.isWall = false
                         node.previousNode = null
-                        node.isNode = true
                     }
                 }
             }
@@ -199,7 +208,7 @@ const Grid = () => {
 
     // visuals
     const visualize = (algorithm) => {
-        if (!isRunning) {
+        if (isRunning === false) {
             clearGrid()
             setIsRunning(true)
             const startNode = grid[startRow][startCol]
@@ -225,8 +234,9 @@ const Grid = () => {
     }
 
     const visualizeMaze = (maze) => {
-        if (!isRunning) {
+        if (isRunning === false) {
             clearGrid()
+            setIsRunning(true)
             const startNode = grid[startRow][startCol]
             const finishNode = grid[finishRow][finishCol]
             let walls
@@ -234,6 +244,12 @@ const Grid = () => {
             switch (maze) {
                 case 'Random':
                     walls = randomMaze(grid, startNode, finishNode)
+                    break
+                case 'Horizontal':
+                    walls = horizontalMaze(grid, startNode, finishNode)
+                    break
+                case 'Vertical':
+                    walls = verticalMaze(grid, startNode, finishNode)
                     break
                 default:
                     break
@@ -243,7 +259,23 @@ const Grid = () => {
     }
 
     const animateMaze = (walls) => {
-
+        clearWalls()
+        clearGrid()
+        for (let i = 0; i <= walls.length; i++) {
+            if (i === walls.length) {
+                setTimeout(() => {
+                    const newGrid = updateMaze(grid, walls)
+                    setGrid(newGrid)
+                    setIsRunning(false)
+                }, i * 10)
+                return
+            }
+            const wall = walls[i]
+            const node = grid[wall.row][wall.col]
+            setTimeout(() => {
+                document.getElementById(`node-${node.row}-${node.col}`).className = 'node node-wall-animated'
+            }, i * 10)
+        }
     }
 
     const animateAlgorithm = (visitedNodesOrdered, nodesInShortestPathOrder) => {
@@ -260,7 +292,7 @@ const Grid = () => {
                 if (nodeClassName !== 'node node-start' && nodeClassName !== 'node node-finish') {
                     document.getElementById(`node-${node.row}-${node.col}`).className = 'node node-visited'
                 }
-            }, 10 * i)
+            }, i * 10)
         }
     }
 
@@ -301,6 +333,8 @@ const Grid = () => {
                 visualizeDijkstra={() => visualize('Dijkstra')}
                 visualizeAstar={() => visualize('Astar')}
                 visualizeRandomMaze={() => visualizeMaze('Random')}
+                visualizeHorizontalMaze={() => visualizeMaze('Horizontal')}
+                visualizeVerticalMaze={() => visualizeMaze('Vertical')}
                 clearGrid={() => clearGrid()}
             />
             <Table responsive className='grid-container'>

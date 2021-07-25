@@ -1,0 +1,17 @@
+.tutorial-box {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  padding: 2%;
+}
+
+.info-wrapper {
+  display: flex;
+  flex-direction: row;
+  margin: 5px;
+  display: inline-block;
+}
+
+.info-text {
+  margin-left: 5px;
+}

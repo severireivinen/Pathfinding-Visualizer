@@ -25,6 +25,26 @@
   animation-play-state: running;
 }
 
+#node-finish {
+  background-color: red;
+}
+
+#node-start {
+  background-color: green;
+}
+
+#wall-node {
+  background-color: rgb(83, 77, 77);
+}
+
+#visited-node {
+  background-color: rgba(2, 127, 250, 255);
+}
+
+#shortest-path {
+  background-color: rgb(255, 255, 0);
+}
+
 @keyframes visitedAnimation {
   0% {
     transform: scale(0.3);
@@ -74,17 +94,17 @@
 @keyframes wallAnimation {
   0% {
     transform: scale(0.4);
-    background-color: rgb(2, 36, 51);
+    background-color: rgb(12, 42, 54);
   }
 
   50% {
     transform: scale(0.6);
-    background-color: rgb(2, 36, 51);
+    background-color: rgb(24, 50, 61);
   }
 
   75% {
     transform: scale(0.8);
-    background-color: rgb(2, 36, 51);
+    background-color: rgb(27, 44, 51);
   }
 
   100% {

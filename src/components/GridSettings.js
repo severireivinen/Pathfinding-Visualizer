@@ -1,7 +1,7 @@
 import React from 'react'
 import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap'
 
-const GridSettings = ({ clearWalls, clearGrid, visualizeAstar, visualizeDijkstra, visualizeRandomMaze }) => (
+const GridSettings = ({ clearWalls, clearGrid, visualizeAstar, visualizeDijkstra, visualizeRandomMaze, visualizeHorizontalMaze, visualizeVerticalMaze }) => (
     <Navbar bg='primary' variant='dark' expand='lg' sticky='top'>
         <Container>
             <Navbar.Brand>Pathfinding Visualizer</Navbar.Brand>
@@ -18,6 +18,8 @@ const GridSettings = ({ clearWalls, clearGrid, visualizeAstar, visualizeDijkstra
                     </NavDropdown>
                     <NavDropdown title='Maze Settings'>
                         <NavDropdown.Item onClick={visualizeRandomMaze}>Random maze</NavDropdown.Item>
+                        <NavDropdown.Item onClick={visualizeHorizontalMaze}>Horizontal maze</NavDropdown.Item>
+                        <NavDropdown.Item onClick={visualizeVerticalMaze}>Vertical maze</NavDropdown.Item>
                     </NavDropdown>
                 </Nav>
             </Navbar.Collapse>
