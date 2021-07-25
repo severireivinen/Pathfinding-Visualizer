@@ -8,6 +8,7 @@ import { astar } from '../services/algorithms/astar'
 import { randomMaze } from '../services/mazes/random'
 import { horizontalMaze } from '../services/mazes/horizontal'
 import { verticalMaze } from '../services/mazes/vertical'
+import { bfs } from '../services/algorithms/breadthFirstSearch'
 
 
 const ROW_COUNT = 25
@@ -21,6 +22,7 @@ const Grid = () => {
     const [finishCol, setfinishCol] = useState(7)
     const [currentRow, setCurrentRow] = useState(0)
     const [currentCol, setCurrentCol] = useState(0)
+    const [speed, setSpeed] = useState(10)
 
     const [mouseIsPressed, setMouseIsPressed] = useState(false)
     const [isWallNode, setIsWallNode] = useState(false)
@@ -147,6 +149,10 @@ const Grid = () => {
         return newGrid
     }
 
+    const updateSpeed = (newSpeed) => {
+        setSpeed(Number(newSpeed))
+    }
+
     const clearWalls = () => {
         const newGrid = grid.slice()
         for (const row of newGrid) {
@@ -224,6 +230,9 @@ const Grid = () => {
                     visitedNodesOrdered = astar(grid, startNode, finishNode)
                     console.log('Visualizing Astar')
                     break
+                case 'Bfs':
+                    visitedNodesOrdered = bfs(grid, startNode, finishNode)
+                    break
                 default:
                     break
             }
@@ -267,14 +276,14 @@ const Grid = () => {
                     const newGrid = updateMaze(grid, walls)
                     setGrid(newGrid)
                     setIsRunning(false)
-                }, i * 10)
+                }, i * speed)
                 return
             }
             const wall = walls[i]
             const node = grid[wall.row][wall.col]
             setTimeout(() => {
                 document.getElementById(`node-${node.row}-${node.col}`).className = 'node node-wall-animated'
-            }, i * 10)
+            }, i * speed)
         }
     }
 
@@ -283,7 +292,7 @@ const Grid = () => {
             if (i === visitedNodesOrdered.length) {
                 setTimeout(() => {
                     animateShortestPath(nodesInShortestPathOrder)
-                }, 10 * i)
+                }, i * speed)
                 return
             }
             setTimeout(() => {
@@ -292,7 +301,7 @@ const Grid = () => {
                 if (nodeClassName !== 'node node-start' && nodeClassName !== 'node node-finish') {
                     document.getElementById(`node-${node.row}-${node.col}`).className = 'node node-visited'
                 }
-            }, i * 10)
+            }, i * speed)
         }
     }
 
@@ -311,7 +320,7 @@ const Grid = () => {
             if (nodesInShortestPathOrder[i] === 'finish') {
                 setTimeout(() => {
                     setIsRunning(false)
-                }, i * 50)
+                }, i * speed * 5)
             } else {
                 setTimeout(() => {
                     const node = nodesInShortestPathOrder[i]
@@ -319,7 +328,7 @@ const Grid = () => {
                     if (nodeClassName !== 'node node-start' && nodeClassName !== 'node node-finish') {
                         document.getElementById(`node-${node.row}-${node.col}`).className = 'node node-shortest-path';
                     }
-                }, i * 40)
+                }, i * speed * 4)
             }
         }
     }
@@ -332,10 +341,12 @@ const Grid = () => {
                 clearWalls={clearWalls}
                 visualizeDijkstra={() => visualize('Dijkstra')}
                 visualizeAstar={() => visualize('Astar')}
+                visualizeBfs={() => visualize('Bfs')}
                 visualizeRandomMaze={() => visualizeMaze('Random')}
                 visualizeHorizontalMaze={() => visualizeMaze('Horizontal')}
                 visualizeVerticalMaze={() => visualizeMaze('Vertical')}
                 clearGrid={() => clearGrid()}
+                updateSpeed={updateSpeed}
             />
             <Table responsive className='grid-container'>
                 <tbody className='grid'>

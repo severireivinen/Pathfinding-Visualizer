@@ -8,27 +8,27 @@ export const astar = (grid, startNode, finishNode) => {
         sortNodesByDistance(unvisitedNodes)
         const closestNode = unvisitedNodes.shift()
 
-        if (!closestNode.isWall) {
-            if (closestNode === finishNode) return visitedNodesOrdered
+        if (closestNode.isWall) continue
+        if (closestNode === finishNode) return visitedNodesOrdered
 
-            closestNode.isVisited = true
-            visitedNodesOrdered.push(closestNode)
+        closestNode.isVisited = true
+        visitedNodesOrdered.push(closestNode)
+        const neighbors = getUnvisitedNeighbors(closestNode, grid)
 
-            const neighbors = getUnvisitedNeighbors(closestNode, grid)
-            for (const neighbor of neighbors) {
-                const distance = closestNode.distance + 1
-                if (!unvisitedNodes.includes(neighbor)) {
-                    unvisitedNodes.unshift(neighbor)
-                    neighbor.distance = distance
-                    neighbor.totalDistance = distance + manhattanDistance(neighbor, finishNode)
-                    neighbor.previousNode = closestNode
-                } else if (distance < neighbor.distance) {
-                    neighbor.distance = distance
-                    neighbor.totalDistance = distance + manhattanDistance(neighbor, finishNode)
-                    neighbor.previousNode = closestNode
-                }
+        for (const neighbor of neighbors) {
+            const distance = closestNode.distance + 1
+            if (!unvisitedNodes.includes(neighbor)) {
+                unvisitedNodes.unshift(neighbor)
+                neighbor.distance = distance
+                neighbor.totalDistance = distance + manhattanDistance(neighbor, finishNode)
+                neighbor.previousNode = closestNode
+            } else if (distance < neighbor.distance) {
+                neighbor.distance = distance
+                neighbor.totalDistance = distance + manhattanDistance(neighbor, finishNode)
+                neighbor.previousNode = closestNode
             }
         }
+
     }
     return visitedNodesOrdered
 }
