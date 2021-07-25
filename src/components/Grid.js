@@ -9,6 +9,7 @@ import { randomMaze } from '../services/mazes/random'
 import { horizontalMaze } from '../services/mazes/horizontal'
 import { verticalMaze } from '../services/mazes/vertical'
 import { bfs } from '../services/algorithms/breadthFirstSearch'
+import { greedyBfs } from '../services/algorithms/greedyBestFirstSearch'
 
 
 const ROW_COUNT = 25
@@ -224,14 +225,15 @@ const Grid = () => {
             switch (algorithm) {
                 case 'Dijkstra':
                     visitedNodesOrdered = dijkstra(grid, startNode, finishNode)
-                    console.log('Visualizing Dijkstra')
                     break
                 case 'Astar':
                     visitedNodesOrdered = astar(grid, startNode, finishNode)
-                    console.log('Visualizing Astar')
                     break
                 case 'Bfs':
                     visitedNodesOrdered = bfs(grid, startNode, finishNode)
+                    break
+                case 'GreedyBfs':
+                    visitedNodesOrdered = greedyBfs(grid, startNode, finishNode)
                     break
                 default:
                     break
@@ -342,6 +344,7 @@ const Grid = () => {
                 visualizeDijkstra={() => visualize('Dijkstra')}
                 visualizeAstar={() => visualize('Astar')}
                 visualizeBfs={() => visualize('Bfs')}
+                visualizeGreedyBfs={() => visualize('GreedyBfs')}
                 visualizeRandomMaze={() => visualizeMaze('Random')}
                 visualizeHorizontalMaze={() => visualizeMaze('Horizontal')}
                 visualizeVerticalMaze={() => visualizeMaze('Vertical')}

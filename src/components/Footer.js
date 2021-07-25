@@ -22,7 +22,7 @@ const Footer = () => {
                     </div>
                     <div className='info-wrapper'>
                         <div className='node'></div>
-                        <span className='info-text'>Empty Node</span>
+                        <span className='info-text'>Unvisited Node</span>
                     </div>
                     <div className='info-wrapper'>
                         <div className='node' id='wall-node'></div>
@@ -39,7 +39,7 @@ const Footer = () => {
                 </div>
                 <Card.Text>
                     Set start and end location by moving green and red nodes.
-                    Optionally drag walls by clicking and holding mouse on empty nodes.
+                    Optionally drag walls by clicking and holding mouse on unvisited nodes.
                     You can also generate a random maze.
                     Pick an algorithm from the drop-down menu and see the magic!
 

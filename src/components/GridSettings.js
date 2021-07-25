@@ -1,7 +1,7 @@
 import React from 'react'
 import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap'
 
-const GridSettings = ({ clearWalls, clearGrid, visualizeAstar, visualizeDijkstra, visualizeBfs, visualizeRandomMaze, visualizeHorizontalMaze, visualizeVerticalMaze, updateSpeed }) => {
+const GridSettings = ({ clearWalls, clearGrid, visualizeAstar, visualizeDijkstra, visualizeBfs, visualizeGreedyBfs, visualizeRandomMaze, visualizeHorizontalMaze, visualizeVerticalMaze, updateSpeed }) => {
 
     const setSpeed = (speed) => {
         updateSpeed(speed)
@@ -22,6 +22,7 @@ const GridSettings = ({ clearWalls, clearGrid, visualizeAstar, visualizeDijkstra
                             <NavDropdown.Item onClick={visualizeAstar}>A*</NavDropdown.Item>
                             <NavDropdown.Item onClick={visualizeDijkstra}>Dijkstra</NavDropdown.Item>
                             <NavDropdown.Item onClick={visualizeBfs}>Breadth-first Search</NavDropdown.Item>
+                            <NavDropdown.Item onClick={visualizeGreedyBfs}>Greedy Best First Search</NavDropdown.Item>
                         </NavDropdown>
                         <NavDropdown title='Generate Maze'>
                             <NavDropdown.Item onClick={visualizeRandomMaze}>Random maze</NavDropdown.Item>
