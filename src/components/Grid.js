@@ -10,10 +10,13 @@ import { horizontalMaze } from '../services/mazes/horizontal'
 import { verticalMaze } from '../services/mazes/vertical'
 import { bfs } from '../services/algorithms/breadthFirstSearch'
 import { greedyBfs } from '../services/algorithms/greedyBestFirstSearch'
+import { dfs } from '../services/algorithms/depthFirstSearch'
+import { recursiveDivisionMaze } from '../services/mazes/recursiveDivision'
+//import { bidirectionalGreedySearch } from '../services/algorithms/bidirectionalGreedySearch'
 
 
-const ROW_COUNT = 25
-const COL_COUNT = 43
+const ROW_COUNT = 25    // 25
+const COL_COUNT = 43    // 43
 
 const Grid = () => {
     const [grid, setGrid] = useState([])
@@ -214,7 +217,7 @@ const Grid = () => {
     }
 
     // visuals
-    const visualize = (algorithm) => {
+    const visualizeAlgorithm = (algorithm) => {
         if (isRunning === false) {
             clearGrid()
             setIsRunning(true)
@@ -235,12 +238,25 @@ const Grid = () => {
                 case 'GreedyBfs':
                     visitedNodesOrdered = greedyBfs(grid, startNode, finishNode)
                     break
+                case 'Dfs':
+                    visitedNodesOrdered = dfs(grid, startNode, finishNode)
+                    break;
+                /*case 'BidirectionalGreedySearch':
+                    visitedNodesOrdered = bidirectionalGreedySearch(grid, startNode, finishNode)
+                    break*/
                 default:
                     break
             }
             const nodesInShortestPathOrder = getNodesInShortestPathOrder(finishNode)
             nodesInShortestPathOrder.push('finish')
+
+            /*if (algorithm === 'BidirectionalGreedySearch') {
+                //
+                console.log(visitedNodesOrdered)
+                animateBidirectionalAlgorithm(visitedNodesOrdered[0], visitedNodesOrdered[1], nodesInShortestPathOrder)
+            } else {*/
             animateAlgorithm(visitedNodesOrdered, nodesInShortestPathOrder)
+            //}
         }
     }
 
@@ -261,6 +277,9 @@ const Grid = () => {
                     break
                 case 'Vertical':
                     walls = verticalMaze(grid, startNode, finishNode)
+                    break
+                case 'Recursive Division':
+                    walls = recursiveDivisionMaze(grid, startNode, finishNode)
                     break
                 default:
                     break
@@ -307,6 +326,36 @@ const Grid = () => {
         }
     }
 
+    /*const animateBidirectionalAlgorithm = (visitedNodesOrderedStart, visitedNodesOrderedFinish, nodesInShortestPathOrder) => {
+        const len = Math.max(visitedNodesOrderedStart.length, visitedNodesOrderedFinish.length)
+    
+        for (let i = 0; i < len; i++) {
+            if (i === visitedNodesOrderedStart.length) {
+                setTimeout(() => {
+                    animateShortestPath(nodesInShortestPathOrder)
+                    console.log('Animatin bidi')
+                }, i * speed)
+                return
+            }
+            setTimeout(() => {
+                const nodeA = visitedNodesOrderedStart[i]
+                const nodeB = visitedNodesOrderedFinish[i]
+                console.log('Len: ', len)
+                console.log('i: ', i)
+                console.log('A', nodeA)
+                console.log('B', nodeB)
+                const nodeAClassName = document.getElementById(`node-${nodeA.row}-${nodeA.col}`).className
+                const nodeBClassName = document.getElementById(`node-${nodeB.row}-${nodeB.col}`).className
+                if (nodeAClassName !== 'node node-start' && nodeAClassName !== 'node node-finish') {
+                    document.getElementById(`node-${nodeA.row}-${nodeA.col}`).className = 'node node-visited'
+                }
+                if (nodeBClassName !== 'node node-start' && nodeBClassName !== 'node node-finish') {
+                    document.getElementById(`node-${nodeB.row}-${nodeB.col}`).className = 'node node-visited'
+                }
+            }, i * speed)
+        }
+    }*/
+
     const getNodesInShortestPathOrder = (finishNode) => {
         const nodesInShortestPathOrder = []
         let currentNode = finishNode
@@ -341,13 +390,16 @@ const Grid = () => {
 
             <GridSettings
                 clearWalls={clearWalls}
-                visualizeDijkstra={() => visualize('Dijkstra')}
-                visualizeAstar={() => visualize('Astar')}
-                visualizeBfs={() => visualize('Bfs')}
-                visualizeGreedyBfs={() => visualize('GreedyBfs')}
+                visualizeDijkstra={() => visualizeAlgorithm('Dijkstra')}
+                visualizeAstar={() => visualizeAlgorithm('Astar')}
+                visualizeBfs={() => visualizeAlgorithm('Bfs')}
+                visualizeGreedyBfs={() => visualizeAlgorithm('GreedyBfs')}
+                visualizeDfs={() => visualizeAlgorithm('Dfs')}
+                //visualizeBidirectionalGreedySearch={() => visualizeAlgorithm('BidirectionalGreedySearch')}
                 visualizeRandomMaze={() => visualizeMaze('Random')}
                 visualizeHorizontalMaze={() => visualizeMaze('Horizontal')}
                 visualizeVerticalMaze={() => visualizeMaze('Vertical')}
+                visualizeRecursiveDivision={() => visualizeMaze('Recursive Division')}
                 clearGrid={() => clearGrid()}
                 updateSpeed={updateSpeed}
             />

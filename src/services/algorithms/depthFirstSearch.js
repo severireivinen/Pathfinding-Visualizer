@@ -1,4 +1,4 @@
-export const bfs = (grid, startNode, finishNode) => {
+export const dfs = (grid, startNode, finishNode) => {
     const visitedNodesInOrder = []
     const unvisitedNodes = []
     unvisitedNodes.push(startNode)
@@ -13,12 +13,10 @@ export const bfs = (grid, startNode, finishNode) => {
         visitedNodesInOrder.push(closestNode)
 
         const unvisitedNeighbors = getUnvisitedNeighbors(closestNode, grid)
-        
+
         for (const neighbor of unvisitedNeighbors) {
             neighbor.previousNode = closestNode
-            if (!unvisitedNodes.includes(neighbor)) {
-                unvisitedNodes.push(neighbor)
-            }
+            unvisitedNodes.unshift(neighbor)
         }
     }
     return visitedNodesInOrder
@@ -34,4 +32,4 @@ const getUnvisitedNeighbors = (node, grid) => {
     return neighbors.filter(neighbor => !neighbor.isVisited)
 }
 
-export default { bfs } // eslint-disable-line
+export default { dfs } // eslint-disable-line

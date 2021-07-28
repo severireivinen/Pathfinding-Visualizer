@@ -1,15 +1,16 @@
 export const horizontalMaze = (grid, startNode, finishNode) => {
     const walls = []
-    const allNodes = getGrid(grid)
-    let index = 0
+    const allRows = getGridRows(grid)
 
-    for (const row of allNodes) {
-        index++
-        const rand = Math.floor(Math.random() * (row.length))
-        for (const node of row) {
-            if (index % 2 === 0) {
+    const startRow = Math.floor(Math.random() * 2)
+
+    for (const row of allRows) {
+        const path = Math.floor(Math.random() * row.length)
+        if ((startRow % 2 === 0 && allRows.indexOf(row) % 2 !== 0) ||
+            (startRow % 2 !== 0 && allRows.indexOf(row) % 2 === 0)) {
+            for (const node of row) {
                 if (node === startNode || node === finishNode) continue
-                if (row.indexOf(node) !== rand) {
+                if (row.indexOf(node) !== path) {
                     walls.push(node)
                 }
             }
@@ -18,7 +19,7 @@ export const horizontalMaze = (grid, startNode, finishNode) => {
     return walls
 }
 
-const getGrid = (grid) => {
+const getGridRows = (grid) => {
     const newGrid = []
     for (const row of grid) {
         const currentRow = []

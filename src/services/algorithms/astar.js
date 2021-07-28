@@ -13,9 +13,9 @@ export const astar = (grid, startNode, finishNode) => {
 
         closestNode.isVisited = true
         visitedNodesInOrder.push(closestNode)
-        const neighbors = getUnvisitedNeighbors(closestNode, grid)
+        const unvisitedNeighbors = getUnvisitedNeighbors(closestNode, grid)
 
-        for (const neighbor of neighbors) {
+        for (const neighbor of unvisitedNeighbors) {
             const distance = closestNode.distance + 1
             if (!unvisitedNodes.includes(neighbor)) {
                 unvisitedNodes.unshift(neighbor)

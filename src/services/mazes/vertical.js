@@ -1,24 +1,26 @@
 export const verticalMaze = (grid, startNode, finishNode) => {
     const walls = []
-    const allNodes = getGrid(grid)
-    let index = 0
+    const allCols = getGridCols(grid)
 
-    for (const col of allNodes) {
-        index++
-        const rand = Math.floor(Math.random() * (col.length))
-        for (const node of col) {
-            if (index % 2 === 0) {
+    const startCol = Math.floor(Math.random() * 2)
+
+    for (const col of allCols) {
+        const path = Math.floor(Math.random() * col.length)
+        if ((startCol % 2 === 0 && allCols.indexOf(col) % 2 !== 0) ||
+            (startCol % 2 !== 0 && allCols.indexOf(col) % 2 === 0)) {
+            for (const node of col) {
                 if (node === startNode || node === finishNode) continue
-                if (col.indexOf(node) !== rand) {
+                if (col.indexOf(node) !== path) {
                     walls.push(node)
                 }
             }
         }
     }
+    console.log('Walls: ', walls)
     return walls
 }
 
-const getGrid = (grid) => {
+const getGridCols = (grid) => {
     const newGrid = []
     for (let i = 0; i < grid[0].length; i++) {
         const currentCol = []
