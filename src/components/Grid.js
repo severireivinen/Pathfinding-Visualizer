@@ -14,16 +14,15 @@ import { dfs } from '../services/algorithms/depthFirstSearch'
 import { recursiveDivisionMaze } from '../services/mazes/recursiveDivision'
 //import { bidirectionalGreedySearch } from '../services/algorithms/bidirectionalGreedySearch'
 
-
-const ROW_COUNT = 25    // 25
-const COL_COUNT = 43    // 43
+const ROW_COUNT = window.matchMedia('(max-width: 400px)').matches ? 19 : 25
+const COL_COUNT = window.matchMedia('(max-height: 900px)').matches ? 10 : 43
 
 const Grid = () => {
     const [grid, setGrid] = useState([])
     const [startRow, setStartRow] = useState(0)
     const [startCol, setStartCol] = useState(0)
-    const [finishRow, setFinishRow] = useState(5)
-    const [finishCol, setfinishCol] = useState(7)
+    const [finishRow, setFinishRow] = useState(ROW_COUNT - 1)
+    const [finishCol, setfinishCol] = useState(COL_COUNT - 1)
     const [currentRow, setCurrentRow] = useState(0)
     const [currentCol, setCurrentCol] = useState(0)
     const [speed, setSpeed] = useState(10)

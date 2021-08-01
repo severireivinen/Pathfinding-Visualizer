@@ -5,7 +5,6 @@ export const recursiveDivisionMaze = (grid, startNode, finishNode) => {
     const horizontal = range(grid.length)   // Horizontal
     walls = []
     divide(vertical, horizontal, startNode, finishNode)
-    console.log('Walls End: ', walls)
     return walls
 
 }
